@@ -38,3 +38,6 @@ jobs:
         title: "Development Build"
         files: |
           ./build/index.html
+          ./build/static/css/main.*.css
+          ./build/static/js/main.*.js
+          ./build/static/media/*.*
