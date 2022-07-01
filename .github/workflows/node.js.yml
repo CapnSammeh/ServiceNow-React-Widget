@@ -9,16 +9,15 @@ on:
   pull_request:
     branches: [ "main" ]
 
+  #Allow the action to be manually invoked  
+  workflow_dispatch:
+
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        node-version: [12.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
+        node-version: [16.x]
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
@@ -31,10 +30,11 @@ jobs:
     - name: Build App
       run: npm run build
     - name: NodeJS Create Release
-      uses: gregoranders/nodejs-create-release@v0.0.18
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: "marvinpinto/action-automatic-releases@latest"
       with:
-        tag: v${{ steps.projectinfo.outputs.version }}
-        name: ${{ steps.projectinfo.outputs.name }} - ${{ steps.projectinfo.outputs.version }} Release
-        target: ${{ github.ref }}
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        automatic_release_tag: "latest"
+        prerelease: true
+        title: "Development Build"
+        files: |
+          /build/*.*
